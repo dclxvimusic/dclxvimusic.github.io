@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DCLXVI — Official</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #080808;
+      --off-black: #0e0e0e;
+      --white: #e8e4dc;
+      --dim: #5a5650;
+      --accent: #c8a97e;
+      --red: #8b1a1a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      cursor: crosshair;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.9) 0%, transparent 100%);
+      z-index: -1;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.2em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-covers {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .hero-covers::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(8,8,8,0.82);
+      z-index: 1;
+    }
+
+    .hero-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(8px) grayscale(60%);
+      transform: scale(1.1);
+      opacity: 0.6;
+    }
+
+    .hero-line {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 48px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 0%, var(--dim) 30%, var(--dim) 70%, transparent 100%);
+      opacity: 0.2;
+    }
+
+    .hero-est {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(14px, 2vw, 22px);
+      letter-spacing: 0.25em;
+      color: var(--dim);
+      margin-bottom: 8px;
+      padding-left: 4px;
+      opacity: 0;
+      animation: fadeUp 1s 0.4s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 18vw, 220px);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-sub {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-sub-line {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-sub p {
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      right: 48px;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+      z-index: 1;
+    }
+
+    .hero-scroll span {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      writing-mode: vertical-rl;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(0.6); }
+    }
+
+    section {
+      padding: 120px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .bio-photo-wrap {
+      width: 100%;
+      height: 350px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .bio-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: grayscale(30%) brightness(0.8);
+    }
+
+    .covers-stack {
+      position: relative;
+      margin-top: 40px;
+      height: 200px;
+      width: 100%;
+    }
+
+    .cover-card {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      left: calc(var(--i) * 30px);
+      top: calc(var(--i) * 6px);
+      text-decoration: none;
+      transition: transform 0.3s ease;
+      z-index: calc(7 - var(--i));
+      display: block;
+    }
+
+    .cover-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.75);
+      transition: filter 0.3s;
+    }
+
+    .cover-card:hover {
+      transform: translateY(-16px);
+      z-index: 10;
+    }
+
+    .cover-card:hover img {
+      filter: brightness(1);
+    }
+
+    .cover-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(8,8,8,0.8);
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      padding: 5px 8px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cover-card:hover .cover-title {
+      opacity: 1;
+    }
+
+    .yt-wrap {
+      margin-top: 40px;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+
+    .yt-frame {
+      width: 100%;
+      height: 100%;
+    }
+
+    .bio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .bio-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      margin-bottom: 48px;
+    }
+
+    .bio-text {
+      font-size: 15px;
+      line-height: 2;
+      color: var(--dim);
+      margin-bottom: 24px;
+    }
+
+    .hl {
+      font-style: normal;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .bio-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(90,86,80,0.2);
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .listen-section {
+      background: var(--off-black);
+      max-width: 100%;
+      padding: 120px 48px;
+      border-top: 1px solid rgba(90,86,80,0.15);
+      border-bottom: 1px solid rgba(90,86,80,0.15);
+    }
+
+    .listen-inner { max-width: 1200px; margin: 0 auto; }
+
+    .platforms {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
+      margin-top: 48px;
+    }
+
+    .platform-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 28px 32px;
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--dim);
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .platform-link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.3s;
+    }
+
+    .platform-link:hover {
+      color: var(--white);
+      background: rgba(200,169,126,0.04);
+      border-color: rgba(200,169,126,0.1);
+    }
+
+    .platform-link:hover::before { transform: scaleY(1); }
+
+    .platform-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      opacity: 0.6;
+      filter: grayscale(100%) brightness(2);
+    }
+
+    .platform-icon { font-size: 18px; opacity: 0.6; }
+
+    .platform-arrow {
+      margin-left: auto;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      font-size: 16px;
+    }
+
+    .platform-link:hover .platform-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    .tracks-section {
+      margin-top: 80px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(90,86,80,0.2);
+    }
+
+    .tracks-label {
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tracks-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .tracks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .track-item {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 24px;
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--dim);
+      transition: all 0.3s;
+      border: 1px solid transparent;
+    }
+
+    .track-item:hover {
+      background: rgba(200,169,126,0.05);
+      border-color: rgba(200,169,126,0.1);
+      color: var(--white);
+    }
+
+    .track-play {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      transition: all 0.3s;
+      padding-left: 2px;
+    }
+
+    .track-item:hover .track-play {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .track-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      flex: 1;
+    }
+
+    .track-streams {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+    }
+
+    .show-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      text-decoration: none;
+      color: var(--dim);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .show-more:hover { color: var(--white); }
+
+    .show-more-arrow { transition: transform 0.3s; }
+
+    .show-more:hover .show-more-arrow { transform: translateX(6px); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .contact-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 0.95;
+      color: var(--white);
+    }
+
+    .contact-text {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--dim);
+      margin-top: 24px;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 2px; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(90,86,80,0.2);
+      text-decoration: none;
+      color: var(--dim);
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .contact-item:first-child { border-top: 1px solid rgba(90,86,80,0.2); }
+    .contact-item:hover { color: var(--white); }
+
+    .contact-item span:last-child {
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+
+    .contact-item:hover span:last-child { transform: translateX(6px); }
+
+    footer {
+      padding: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(90,86,80,0.15);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      opacity: 0.5;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(90,86,80,0.3), transparent);
+      margin: 0 48px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .hero-scroll { display: none; }
+      section { padding: 80px 24px; }
+      .bio-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .listen-section { padding: 80px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+      .bio-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">DCLXVI</a>
+    <ul class="nav-links">
+      <li><a href="#bio">About</a></li>
+      <li><a href="#listen">Listen</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-covers">
+      <img class="hero-cover" src="https://images.genius.com/2dfa8e06a768c4bc38956cda877638e0.1000x1000x1.png" alt="">
+      <img class="hero-cover" src="https://i.scdn.co/image/ab67616d00001e02f6a3c9babdc1427da0218320" alt="">
+      <img class="hero-cover" src="https://i1.sndcdn.com/artworks-On6yhVWPJPBDyUyW-Xy7v8w-t500x500.png" alt="">
+      <img class="hero-cover" src="https://i1.sndcdn.com/artworks-BsJ4Nquy1djMDagv-6YdTbw-t500x500.jpg" alt="">
+      <img class="hero-cover" src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/78/ba/8f/78ba8f14-20c8-283e-a4fb-d86912cae159/7316210732673.jpg/600x600bf-60.jpg" alt="">
+    </div>
+    <div class="hero-line"></div>
+
+    <div class="hero-est">Est. 2020</div>
+    <h1 class="hero-title">DCLXVI</h1>
+
+    <div class="hero-sub">
+      <div class="hero-sub-line"></div>
+      <p>Wave · Phonk</p>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+
+  <section id="bio">
+    <div class="section-label">About</div>
+    <div class="bio-grid">
+      <div>
+        <h2 class="bio-title reveal">The<br/>Sound<br/>of Dark</h2>
+        <div class="bio-stats reveal">
+          <div>
+            <div class="stat-number">15M+</div>
+            <div class="stat-label">Total Streams</div>
+          </div>
+          <div>
+            <div class="stat-number">47</div>
+            <div class="stat-label">Tracks</div>
+          </div>
+          <div>
+            <div class="stat-number">3</div>
+            <div class="stat-label">Mini Albums</div>
+          </div>
+        </div>
+        <div class="covers-stack reveal">
+          <a class="cover-card" href="https://open.spotify.com/track/4NoZFLy57QNB7zp2yVfuCx" target="_blank" style="--i:0">
+            <img src="https://images.genius.com/fc3950d44a7accded0dd6b68606137e4.1000x1000x1.png" alt="LOST">
+            <span class="cover-title">LOST</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/1f4eZN0Gr5b58BWHVECdX5" target="_blank" style="--i:1">
+            <img src="https://cdn-images.dzcdn.net/images/cover/a55fbe4ab09015787fc4ae4529203b89/0x1900-000000-80-0-0.jpg" alt="ERROR">
+            <span class="cover-title">ERROR</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/5QrljH6kbT8NaRqkFDZ6w8" target="_blank" style="--i:2">
+            <img src="https://cdn-images.dzcdn.net/images/cover/710ba62c5631f6fa67dfd3c1bb51e207/1900x1900-000000-80-0-0.jpg" alt="DISSECTION">
+            <span class="cover-title">DISSECTION</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/3LemTKnb0WgtaMUVub7OUG" target="_blank" style="--i:3">
+            <img src="https://cdn-images.dzcdn.net/images/cover/ffef57f7a6e6ffa0e1851d64fd80a8b5/0x1900-000000-80-0-0.jpg" alt="OBSCURE">
+            <span class="cover-title">OBSCURE</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/19o06KPrXBrytZu7w0BFOF" target="_blank" style="--i:4">
+            <img src="https://cdn-images.dzcdn.net/images/cover/d02d34e89ff8b4b90860e571b472e52e/1900x1900-000000-80-0-0.jpg" alt="GLOW">
+            <span class="cover-title">GLOW</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/22jqFAGcWaBJUkAY2S7fKV" target="_blank" style="--i:5">
+            <img src="https://cdn-images.dzcdn.net/images/cover/f4b37b4230120fcffcc55ed2d4ed1ac5/1900x1900-000000-80-0-0.jpg" alt="PARADOX">
+            <span class="cover-title">PARADOX</span>
+          </a>
+          <a class="cover-card" href="https://open.spotify.com/track/3zoexB42QL2bRqLCpZMxaz" target="_blank" style="--i:6">
+            <img src="https://cdn-images.dzcdn.net/images/cover/ad999a0492d3b664d27e9f072f8325a1/0x1900-000000-80-0-0.jpg" alt="MADNESS">
+            <span class="cover-title">MADNESS</span>
+          </a>
+        </div>
+        <a class="show-more reveal" href="https://open.spotify.com/artist/7hCAQKXiGrKcsZe2T0oDha" target="_blank">
+          <span>Show More</span>
+          <span class="show-more-arrow">→</span>
+        </a>
+      </div>
+      <div class="bio-right-col">
+        <div class="bio-photo-wrap reveal">
+          <img class="bio-photo" src="https://i.ibb.co/kV9VDhGt/IMG-1113.jpg" alt="DCLXVI">
+        </div>
+        <p class="bio-text reveal"><em class="hl">DCLXVI</em> is a producer from Tashkent, Uzbekistan known for blending atmospheric phonk, wave-inspired textures, and cinematic electronic production. His sound combines dark immersive melodies, distorted rhythms, and emotional depth, creating a distinct sonic identity shaped by atmosphere and mood.</p>
+        <p class="bio-text reveal">Influenced by underground hip-hop culture, ambient electronic music, and cinematic sound design, <em class="hl">DCLXVI</em> focuses on immersive production that balances heavy energy with melancholic textures. Releases such as "<em class="hl">LOST</em>", "<em class="hl">DISSECTION</em>", and "<em class="hl">ERROR</em>" helped define the darker direction of his sound and introduced his music to a growing international audience.</p>
+        <p class="bio-text reveal">With listeners across the United States, Europe, and beyond, <em class="hl">DCLXVI</em> continues to evolve his artistic vision through atmospheric and emotionally driven production.</p>
+      </div>
+    </div>
+
+    <div class="tracks-section reveal">
+      <div class="tracks-label">Featured Tracks</div>
+      <div class="tracks-list">
+        <a class="track-item" href="https://open.spotify.com/track/4NoZFLy57QNB7zp2yVfuCx" target="_blank">
+          <div class="track-play">▶</div>
+          <div class="track-name">LOST</div>
+          <div class="track-streams">1.9M streams</div>
+        </a>
+        <a class="track-item" href="https://open.spotify.com/track/5QrljH6kbT8NaRqkFDZ6w8" target="_blank">
+          <div class="track-play">▶</div>
+          <div class="track-name">DISSECTION</div>
+          <div class="track-streams">923K streams</div>
+        </a>
+        <a class="track-item" href="https://open.spotify.com/track/1f4eZN0Gr5b58BWHVECdX5" target="_blank">
+          <div class="track-play">▶</div>
+          <div class="track-name">ERROR</div>
+          <div class="track-streams">1.3M streams</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="listen-section" id="listen">
+    <div class="listen-inner">
+      <div class="section-label">Listen</div>
+      <div class="platforms">
+        <a class="platform-link reveal" href="https://open.spotify.com/artist/7hCAQKXiGrKcsZe2T0oDha" target="_blank">
+          <img class="platform-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/3840px-Spotify_icon.svg.png" alt="Spotify"><span>Spotify</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://music.apple.com/ru/artist/dclxvi/1556893577" target="_blank">
+          <img class="platform-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/960px-Apple_Music_icon.svg.png" alt="Apple Music"><span>Apple Music</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://soundcloud.com/user-954916997" target="_blank">
+          <img class="platform-logo" src="https://cdn.worldvectorlogo.com/logos/soundcloud-icon-1.svg" alt="SoundCloud"><span>SoundCloud</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://www.youtube.com/@im.dclxvi" target="_blank">
+          <img class="platform-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/3840px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube"><span>YouTube</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://tidal.com/artist/24020128" target="_blank">
+          <img class="platform-logo" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tidal-white-icon.png" alt="Tidal"><span>Tidal</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://deezer.com/ru/artist/128272702" target="_blank">
+          <img class="platform-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Deezer_New_Icon.svg/1280px-Deezer_New_Icon.svg.png" alt="Deezer"><span>Deezer</span><span class="platform-arrow">→</span>
+        </a>
+        <a class="platform-link reveal" href="https://music.amazon.com/artists/B002GDL4K4" target="_blank">
+          <img class="platform-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Amazon_Music_logo.svg/330px-Amazon_Music_logo.svg.png" alt="Amazon Music"><span>Amazon Music</span><span class="platform-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="contact-grid">
+      <div>
+        <h2 class="contact-title reveal">Get<br/>In<br/>Touch</h2>
+        <p class="contact-text reveal">For bookings, collaborations, licensing, and press inquiries.</p>
+      </div>
+      <div class="contact-links">
+        <a class="contact-item reveal" href="https://instagram.com/im.dclxvi" target="_blank">
+          <span>Instagram</span><span>→</span>
+        </a>
+        <a class="contact-item reveal" href="https://www.tiktok.com/@im.dclxvi" target="_blank">
+          <span>TikTok</span><span>→</span>
+        </a>
+        <a class="contact-item reveal" href="mailto:sanjarkhuja.ismoilov@gmail.com" target="_blank">
+          <span>Email</span><span>→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">DCLXVI</div>
+    <div class="footer-copy">© 2026 DCLXVI. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
